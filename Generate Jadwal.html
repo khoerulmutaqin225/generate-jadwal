@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Excel to HTML List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #data-list {
+            margin-top: 20px;
+        }
+
+        .data-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .data-column {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .checkbox-container {
+            margin-bottom: 20px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+
+<body>
+    <input type="file" id="file-input" accept=".xlsx">
+    <h1 style="text-align: center; padding:20px">Kapal available atau tidak</h1>
+
+    <div class="checkbox-container" style="text-align: center;">
+        <label><input type="checkbox" value="BC 20007" checked> BC 20007</label>
+        <label><input type="checkbox" value="BC 1001" checked> BC 1001</label>
+        <label><input type="checkbox" value="BC 15029"> BC 15029</label>
+        <label><input type="checkbox" value="BC 7005"> BC 7005</label>
+        <label><input type="checkbox" value="BC 10017" checked> BC 10017</label>
+        <label><input type="checkbox" value="BC 15028" checked> BC 15028</label>
+        <label><input type="checkbox" value="BC 7004" checked> BC 7004</label>
+        <label><input type="checkbox" value="BC 15026" checked> BC 15026</label>
+        <label><input type="checkbox" value="BC 15027" checked> BC 15027</label>
+    </div>
+
+    <div id="content">
+        <h1 style="text-align: center; padding:20px">Upload Excel and Generate Jadwal</h1>
+        <!-- <div style="text-align: center;">
+            <button id="generate-pdf">Generate PDF</button>
+        </div> -->
+        <div id="data-list">
+            <div class="data-container">
+                <div class="data-column" id="column-1">
+                    <h3>Kelompok 1</h3>
+                    <ul id="list-1"></ul>
+                </div>
+                <div class="data-column" id="column-2">
+                    <h3>Kelompok 2</h3>
+                    <ul id="list-2"></ul>
+                </div>
+                <div class="data-column" id="column-3">
+                    <h3>Kelompok 3</h3>
+                    <ul id="list-3"></ul>
+                </div>
+                <div class="data-column" id="column-4">
+                    <h3>Kelompok 4</h3>
+                    <ul id="list-4"></ul>
+                </div>
+                <div class="data-column" id="column-5">
+                    <h3>Kelompok 5</h3>
+                    <ul id="list-5"></ul>
+                </div>
+                <div class="data-column" id="column-6">
+                    <h3>Kelompok 6</h3>
+                    <ul id="list-6"></ul>
+                </div>
+                <div class="data-column" id="column-7">
+                    <h3>Kelompok 7</h3>
+                    <ul id="list-7"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; padding:20px">
+        <!-- <input type="file" id="file-input" accept=".xlsx"> -->
+        <button id="generate-pdf">Generate PDF</button>
+    </div>
+
+    <script>
+        document.getElementById('file-input').addEventListener('change', handleFileAndCheckboxes);
+
+        // Function to handle file input and checkbox changes
+        async function handleFileAndCheckboxes() {
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+
+            if (!file) return;
+
+            const workbook = new ExcelJS.Workbook();
+            await workbook.xlsx.load(file);
+
+            const worksheet = workbook.worksheets[0];
+            const excludedHeaders = getExcludedHeaders();
+            const data = extractData(worksheet, excludedHeaders);
+
+            displayData(data);
+        }
+
+        // Function to update data when checkboxes change
+        document.querySelectorAll('.checkbox-container input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', handleFileAndCheckboxes);
+        });
+
+        // Function to get excluded headers from checkboxes
+        function getExcludedHeaders() {
+            const checkboxes = document.querySelectorAll('.checkbox-container input[type="checkbox"]');
+            const excludedHeaders = [];
+            checkboxes.forEach(checkbox => {
+                if (!checkbox.checked) {
+                    excludedHeaders.push(checkbox.value);
+                }
+
+            });
+            return excludedHeaders;
+        }
+
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                // Pilih indeks acak dari 0 hingga i
+                const j = Math.floor(Math.random() * (i + 1));
+
+                // Tukar elemen array[i] dengan elemen array[j]
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+
+
+        // Function to extract data
+        function extractData(sheet, excludedHeaders) {
+            let allData = [];
+            const columnsToInclude = [];
+
+            // Get header row (assuming headers are in the first row)
+            const headerRow = sheet.getRow(1);
+            headerRow.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                const headerText = cell.text.trim();
+                if (!excludedHeaders.includes(headerText) && headerText !== "Column A") {
+                    columnsToInclude.push(colNumber);
+                }
+            });
+
+            // Extract data from columns that are included
+            let unique = ''
+            sheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+                if (rowNumber <= 1) return; // Skip the header row
+
+                columnsToInclude.forEach(colNumber => {
+                    // Skip column A (colNumber === 1)
+                    if (colNumber === 1) return;
+
+                    const cell = row.getCell(colNumber);
+                    if (cell.value) {
+                        if (cell.value.toString() === 'Muhammad Reza Saputera') {
+                            unique = 'Muhammad Reza Saputera'
+                        } else {
+                            allData.push(cell.value.toString());
+                        }
+                        // allData.push(unique);
+                    }
+                });
+            });
+            allData.push(unique);
+            allData = shuffleArray(allData);
+            return allData;
+        }
+
+
+
+
+
+        function displayData(allData) {
+            const totalItems = allData.length;
+            const columns = 3;
+            const itemsPerColumn = Math.ceil(totalItems / columns);
+            const columnData = [[], [], []]; // Arrays for each column
+
+            for (let i = 0; i < totalItems; i++) {
+                const columnIndex = Math.floor(i / itemsPerColumn);
+                columnData[columnIndex].push(allData[i]);
+            }
+
+            // Display Kelompok 1
+            const list1 = document.getElementById('list-1');
+            list1.innerHTML = '';
+            columnData[0].forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                list1.appendChild(li);
+            });
+
+            // Display Column 2
+            const list2 = document.getElementById('list-2');
+            list2.innerHTML = '';
+            columnData[1].forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                list2.appendChild(li);
+            });
+
+            // Display Column 3
+            const list3 = document.getElementById('list-3');
+            list3.innerHTML = '';
+            columnData[2].forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                list3.appendChild(li);
+            });
+
+            // Duplicate Kelompok 1 to Column 4
+            const list4 = document.getElementById('list-4');
+            list4.innerHTML = '';
+            columnData[0].forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                list4.appendChild(li);
+            });
+
+            // Duplicate Column 2 to Column 5
+            const list5 = document.getElementById('list-5');
+            list5.innerHTML = '';
+            columnData[1].forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                list5.appendChild(li);
+            });
+
+            // Duplicate Column 3 to Column 6
+            const list6 = document.getElementById('list-6');
+            list6.innerHTML = '';
+            columnData[2].forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                list6.appendChild(li);
+            });
+
+            // Duplicate Kelompok 1 to Column 7
+            const list7 = document.getElementById('list-7');
+            list7.innerHTML = '';
+            columnData[0].forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                list7.appendChild(li);
+            });
+        }
+
+
+
+        document.getElementById('generate-pdf').addEventListener('click', async () => {
+            const { jsPDF } = window.jspdf;
+
+            // Capture the screenshot of the element with id "content"
+            const canvas = await html2canvas(document.getElementById('content'));
+            const imgData = canvas.toDataURL('image/png');
+
+            // Setup PDF
+            const pdf = new jsPDF('l', 'mm', 'a4'); // Changed to landscape
+            const imgWidth = 297; // A4 paper width in mm for landscape
+            const pageHeight = 210; // A4 paper height in mm for landscape
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            let heightLeft = imgHeight;
+
+            // Add first image to the PDF
+            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            // Add additional pages if needed
+            while (heightLeft >= 0) {
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, heightLeft - imgHeight, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            // Save the PDF
+            pdf.save('sample.pdf');
+        });
+
+    </script>
+</body>
+
+</html>
