@@ -126,7 +126,7 @@
             const excludedHeaders = getExcludedHeaders();
             const data = extractData(worksheet, excludedHeaders);
 
-            displayData(data);
+            //displayData(data);
         }
 
         // Function to update data when checkboxes change
@@ -164,6 +164,16 @@
         // Function to extract data
         function extractData(sheet, excludedHeaders) {
             let allData = [];
+            let data3 = [];
+            let data4 = [];
+            let data5 = [];
+            let data6 =[];
+            
+            let data7 = [];
+            let data8 = [];
+            let data9 = [];
+            let data10 = [];
+            
             const columnsToInclude = [];
 
             // Get header row (assuming headers are in the first row)
@@ -176,44 +186,196 @@
             });
 
             // Extract data from columns that are included
-            let unique = ''
+            
             sheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
                 if (rowNumber <= 1) return; // Skip the header row
 
                 columnsToInclude.forEach(colNumber => {
                     // Skip column A (colNumber === 1)
                     if (colNumber === 1) return;
-
+                    if (colNumber === 2){
                     const cell = row.getCell(colNumber);
                     if (cell.value) {
-                        if (cell.value.toString() === 'Muhammad Reza Saputera') {
-                            unique = 'Muhammad Reza Saputera'
+                        if (cell.value.toString() === 'z') {
+                            unique = 'z'
                         } else {
                             allData.push(cell.value.toString());
                         }
                         // allData.push(unique);
                     }
+                    }
+                    
+                  // baris 3  
+                  if (colNumber === 3){
+                    const cell = row.getCell(colNumber);
+                    if (cell.value) {
+                        if (cell.value.toString() === 'z') {
+                            unique = 'z'
+                        } else {
+                            data3.push(cell.value.toString());
+                        }
+                        // allData.push(unique);
+                    }
+                    }
+                    
+                    // baris 4 or d
+                     if (colNumber === 4){
+                    const cell = row.getCell(colNumber);
+                    if (cell.value) {
+                        if (cell.value.toString() === 'z') {
+                            unique = 'z'
+                        } else {
+                            data4.push(cell.value.toString());
+                        }
+                        // allData.push(unique);
+                    }
+                    }
+                    
+                    
+                    // baris 5 or e
+                     if (colNumber === 5){
+                    const cell = row.getCell(colNumber);
+                    if (cell.value) {
+                        if (cell.value.toString() === 'z') {
+                            unique = 'z'
+                        } else {
+                            data5.push(cell.value.toString());
+                        }
+                        // allData.push(unique);
+                    }
+                    }
+                  
+          // baris 6 or f
+                     if (colNumber === 6){
+                    const cell = row.getCell(colNumber);
+                    if (cell.value) {
+                        if (cell.value.toString() === 'z') {
+                            unique = 'z'
+                        } else {
+                            data6.push(cell.value.toString());
+                        }
+                        // allData.push(unique);
+                    }
+                    }         
+                    
+                    
+                    // baris 7
+                     if (colNumber === 7){
+                    const cell = row.getCell(colNumber);
+                    if (cell.value) {
+                        if (cell.value.toString() === 'z') {
+                            unique = 'z'
+                        } else {
+                            data7.push(cell.value.toString());
+                        }
+                        // allData.push(unique);
+                    }
+                    }
+                    
+                  // baris 8
+                  if (colNumber === 8){
+                    const cell = row.getCell(colNumber);
+                    if (cell.value) {
+                        if (cell.value.toString() === 'z') {
+                            unique = 'z'
+                        } else {
+                            data8.push(cell.value.toString());
+                        }
+                        // allData.push(unique);
+                    }
+                    }
+                    
+                    // baris 9
+                     if (colNumber === 9){
+                    const cell = row.getCell(colNumber);
+                    if (cell.value) {
+                        if (cell.value.toString() === 'z') {
+                            unique = 'z'
+                        } else {
+                            data9.push(cell.value.toString());
+                        }
+                        // allData.push(unique);
+                    }
+                    }
+                    
+                    
+                    // baris 10
+                     if (colNumber === 10){
+                    const cell = row.getCell(colNumber);
+                    if (cell.value) {
+                        if (cell.value.toString() === 'z') {
+                            unique = 'z'
+                        } else {
+                            data10.push(cell.value.toString());
+                        }
+
+                    }
+                    }
+                  
+         
+     
                 });
             });
-            allData.push(unique);
-            allData = shuffleArray(allData);
-            return allData;
+            let data2 = allData
+  displayData(data2, data3, data4, data5, data6, data7, data8, data9, data10);
+           
+            
         }
 
 
 
 
 
-        function displayData(allData) {
+        function displayData(allData, data3, data4, data5, data6, data7, data8, data9, data10) {
             const totalItems = allData.length;
             const columns = 3;
             const itemsPerColumn = Math.ceil(totalItems / columns);
             const columnData = [[], [], []]; // Arrays for each column
 
-            for (let i = 0; i < totalItems; i++) {
-                const columnIndex = Math.floor(i / itemsPerColumn);
-                columnData[columnIndex].push(allData[i]);
-            }
+data = allData
+for(let i= 1; i<10; i++){
+    index = i
+    if(index % 3 === 0 ){
+    columnData[2].push(allData[i-1]);
+    columnData[2].push(data3[i-1]);
+    columnData[2].push(data4[i-1]);
+    columnData[2].push(data5[i-1]);
+    
+    columnData[2].push(data6[i-1]);
+    columnData[2].push(data7[i-1]);
+    columnData[2].push(data8[i-1]);
+    columnData[2].push(data9[i-1]);
+    columnData[2].push(data10[i-1]);
+   
+    
+    } else if(index % 2 === 0){
+    columnData[1].push(allData[i-1]);
+    columnData[1].push(data3[i-1]);
+    columnData[1].push(data4[i-1]);
+    columnData[1].push(data5[i-1]);
+    
+    columnData[1].push(data6[i-1]);
+    columnData[1].push(data7[i-1]);
+    columnData[1].push(data8[i-1]);
+    columnData[1].push(data9[i-1]);
+    columnData[1].push(data10[i-1]);
+    
+    
+    
+    } else{
+        columnData[0].push(allData[i-1]);
+        columnData[0].push(data3[i-1]);
+        columnData[0].push(data4[i-1]);
+        columnData[0].push(data5[i-1]);
+    
+    columnData[0].push(data6[i-1]);
+    columnData[0].push(data7[i-1]);
+    columnData[0].push(data8[i-1]);
+    columnData[0].push(data9[i-1]);
+    columnData[0].push(data10[i-1]);
+    
+    }
+}
 
             // Display Kelompok 1
             const list1 = document.getElementById('list-1');
