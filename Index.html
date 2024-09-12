@@ -63,6 +63,7 @@
         <label><input type="checkbox" value="BC 7004" checked> BC 7004</label>
         <label><input type="checkbox" value="BC 15026" checked> BC 15026</label>
         <label><input type="checkbox" value="BC 15027" checked> BC 15027</label>
+        <label><input type="checkbox" value="" checked> Acak</label>
     </div>
 
     <div id="content">
@@ -316,7 +317,19 @@
      
                 });
             });
+            
             let data2 = allData
+            
+            data2 = shuffleArray(data2)
+            data3 = shuffleArray(data3)
+            data4 = shuffleArray(data4)
+            data5 = shuffleArray(data5)
+            data6 = shuffleArray(data6)
+            data7 = shuffleArray(data7)
+            data8 = shuffleArray(data8)
+            data9 = shuffleArray(data9) 
+            data10 = shuffleArray(data10) 
+            
   displayData(data2, data3, data4, data5, data6, data7, data8, data9, data10);
            
             
