@@ -43,9 +43,15 @@
         margin-bottom: 20px;
       }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script> -->
+    <script src="./library/exceljs.min.js"></script>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> -->
+     <script src="./library/jspdf.umd.min.js"></script>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> -->
+     <script src="./library/html2canvas.min.js"></script>
+
   </head>
 
   <body>
@@ -194,7 +200,8 @@
 
       // Function to extract data
       function extractData(sheet, excludedHeaders) {
-        let allData = [];
+        //let allData = [];
+        let data2 = [];
         let data3 = [];
         let data4 = [];
         let data5 = [];
@@ -230,12 +237,7 @@
             if (colNumber === 2) {
               const cell = row.getCell(colNumber);
               if (cell.value) {
-                if (cell.value.toString() === "z") {
-                  unique = "z";
-                } else {
-                  allData.push(cell.value.toString());
-                }
-                // allData.push(unique);
+                data2.push(cell.value.toString());
               }
             }
 
@@ -243,12 +245,7 @@
             if (colNumber === 3) {
               const cell = row.getCell(colNumber);
               if (cell.value) {
-                if (cell.value.toString() === "z") {
-                  unique = "z";
-                } else {
-                  data3.push(cell.value.toString());
-                }
-                // allData.push(unique);
+                data3.push(cell.value.toString());
               }
             }
 
@@ -256,12 +253,7 @@
             if (colNumber === 4) {
               const cell = row.getCell(colNumber);
               if (cell.value) {
-                if (cell.value.toString() === "z") {
-                  unique = "z";
-                } else {
-                  data4.push(cell.value.toString());
-                }
-                // allData.push(unique);
+                data4.push(cell.value.toString());
               }
             }
 
@@ -269,12 +261,7 @@
             if (colNumber === 5) {
               const cell = row.getCell(colNumber);
               if (cell.value) {
-                if (cell.value.toString() === "z") {
-                  unique = "z";
-                } else {
-                  data5.push(cell.value.toString());
-                }
-                // allData.push(unique);
+                data5.push(cell.value.toString());
               }
             }
 
@@ -282,12 +269,7 @@
             if (colNumber === 6) {
               const cell = row.getCell(colNumber);
               if (cell.value) {
-                if (cell.value.toString() === "z") {
-                  unique = "z";
-                } else {
-                  data6.push(cell.value.toString());
-                }
-                // allData.push(unique);
+                data6.push(cell.value.toString());
               }
             }
 
@@ -295,12 +277,7 @@
             if (colNumber === 7) {
               const cell = row.getCell(colNumber);
               if (cell.value) {
-                if (cell.value.toString() === "z") {
-                  unique = "z";
-                } else {
-                  data7.push(cell.value.toString());
-                }
-                // allData.push(unique);
+                data7.push(cell.value.toString());
               }
             }
 
@@ -308,12 +285,7 @@
             if (colNumber === 8) {
               const cell = row.getCell(colNumber);
               if (cell.value) {
-                if (cell.value.toString() === "z") {
-                  unique = "z";
-                } else {
-                  data8.push(cell.value.toString());
-                }
-                // allData.push(unique);
+                data8.push(cell.value.toString());
               }
             }
 
@@ -321,12 +293,7 @@
             if (colNumber === 9) {
               const cell = row.getCell(colNumber);
               if (cell.value) {
-                if (cell.value.toString() === "z") {
-                  unique = "z";
-                } else {
-                  data9.push(cell.value.toString());
-                }
-                // allData.push(unique);
+                data9.push(cell.value.toString());
               }
             }
 
@@ -334,17 +301,11 @@
             if (colNumber === 10) {
               const cell = row.getCell(colNumber);
               if (cell.value) {
-                if (cell.value.toString() === "z") {
-                  unique = "z";
-                } else {
-                  data10.push(cell.value.toString());
-                }
+                data10.push(cell.value.toString());
               }
             }
           });
         });
-
-        let data2 = allData;
 
         data2 = shuffleArray(data2);
         data3 = shuffleArray(data3);
